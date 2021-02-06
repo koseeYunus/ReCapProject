@@ -7,38 +7,38 @@ using System.Text;
 
 namespace Business.Concrate
 {
-    public class BrandManager : IEquatableService<Brand>
+    public class BrandManager: IBrandService 
     {
-        IEquatableDal<Brand> _equatableDal;
+        IBrandDal _brandDal;
 
-        public BrandManager(IEquatableDal<Brand> equatableDal)
+        public BrandManager(IBrandDal brandDal)
         {
-            _equatableDal = equatableDal;
+            _brandDal = brandDal;
         }
 
         public void Add(Brand obj)
         {
-            _equatableDal.Add(obj);
+            _brandDal.Add(obj);
         }
 
-        public void Delete(int id)
+        public void Delete(Brand obj)
         {
-            _equatableDal.Delete(id);
+            _brandDal.Delete(obj);
         }
 
         public List<Brand> GetAll()
         {
-            return _equatableDal.GetAll();
+            return _brandDal.GetAll();
         }
 
         public Brand GetById(int id)
         {
-            return _equatableDal.GetById(id);
+            return _brandDal.Get(b=> b.Id==id);
         }
 
         public void Update(Brand obj)
         {
-            _equatableDal.Update(obj);
+            _brandDal.Update(obj);
         }
     }
 }

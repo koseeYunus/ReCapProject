@@ -3,11 +3,12 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DataAccess.Concrete.InMemory
 {
-    public class InMemoryCarDal : IEquatableDal<Car>
+    public class InMemoryCarDal : ICarDal
     {
         List<Car> _cars;
         public InMemoryCarDal()
@@ -25,9 +26,29 @@ namespace DataAccess.Concrete.InMemory
             _cars.Add(car);
         }
 
-        public void Delete(int id)
+        public void Delete(Car obj)
         {
-            _cars.Remove(_cars.SingleOrDefault(c=> c.Id==id));
+            _cars.Remove(_cars.SingleOrDefault(c=> c.Id==obj.Id));
+        }
+
+        public Car Get(Expression<Func<Car, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }       
+
+        public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
+        {
+            return _cars;
+        }        
+
+        public void Update(Car car)
+        {
+            Car carToUpdate = _cars.SingleOrDefault(c=>c.Id==car.Id);
+            carToUpdate.BrandId = car.BrandId;
+            carToUpdate.ColorId = car.ColorId;
+            carToUpdate.ModelYear = car.ModelYear;
+            carToUpdate.DailyPrice = car.DailyPrice;
+            carToUpdate.Description = car.Description;
         }
 
         public List<Car> GetAll()
@@ -38,17 +59,7 @@ namespace DataAccess.Concrete.InMemory
         public Car GetById(int id)
         {
             //Id si uyuşan arabayı gönderir.
-            return _cars.SingleOrDefault(c=>c.Id==id);
-        }
-
-        public void Update(Car car)
-        {
-            Car carToUpdate = _cars.SingleOrDefault(c=>c.Id==car.Id);
-            carToUpdate.BrandId = car.BrandId;
-            carToUpdate.ColorId = car.ColorId;
-            carToUpdate.ModelYear = car.ModelYear;
-            carToUpdate.DailyPrice = car.DailyPrice;
-            carToUpdate.Description = car.Description;
+            return _cars.SingleOrDefault(c => c.Id == id);
         }
     }
 }

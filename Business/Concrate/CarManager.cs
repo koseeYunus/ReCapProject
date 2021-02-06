@@ -7,38 +7,38 @@ using System.Text;
 
 namespace Business.Concrate
 {
-    public class CarManager : IEquatableService<Car>
+    public class CarManager : ICarService
     {
-        IEquatableDal<Car> _equatableDal;
+        ICarDal _carDal;
 
-        public CarManager(IEquatableDal<Car> equatableDal)
+        public CarManager(ICarDal carDal)
         {
-            _equatableDal = equatableDal;
+            _carDal = carDal;
 
         }
         public void Add(Car obj)
         {
-            _equatableDal.Add(obj);
+            _carDal.Add(obj);
         }
 
-        public void Delete(int id)
+        public void Delete(Car obj)
         {
-            _equatableDal.Delete(id);
+            _carDal.Delete(obj);
         }
 
         public List<Car> GetAll()
         {
-            return _equatableDal.GetAll();
+            return _carDal.GetAll();
         }
 
         public Car GetById(int id)
         {
-            return _equatableDal.GetById(id);
+            return _carDal.Get(c=> c.Id==id);
         }
 
         public void Update(Car obj)
         {
-            _equatableDal.Update(obj);
+            _carDal.Update(obj);
         }
     }
 }

@@ -3,11 +3,12 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DataAccess.Concrete.InMemory
 {
-    public class InMemoryBrandDal: IEquatableDal<Brand>
+    public class InMemoryBrandDal: IBrandDal
     {
         List<Brand> _brands;
         public InMemoryBrandDal()
@@ -23,9 +24,19 @@ namespace DataAccess.Concrete.InMemory
             _brands.Add(obj);
         }
 
-        public void Delete(int id)
+        public void Delete(Brand obj)
         {
-            _brands.Remove(_brands.SingleOrDefault(b => b.Id == id));
+            _brands.Remove(_brands.SingleOrDefault(b => b.Id == obj.Id));
+        }
+
+        public Brand Get(Expression<Func<Brand, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Brand> GetAll(Expression<Func<Brand, bool>> filter = null)
+        {
+            return _brands;
         }
 
         public void Update(Brand obj)
@@ -34,12 +45,12 @@ namespace DataAccess.Concrete.InMemory
             brandToUpdate.BrandName = obj.BrandName;
         }
 
-        List<Brand> IEquatableDal<Brand>.GetAll()
+        public List<Brand> GetAll()
         {
             return _brands;
         }
 
-        Brand IEquatableDal<Brand>.GetById(int id)
+        public Brand GetById(int id)
         {
             //Id si uyuşan markayı gönderir.
             return _brands.SingleOrDefault(b => b.Id == id);

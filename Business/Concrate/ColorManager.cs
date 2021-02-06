@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
+using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -7,37 +8,38 @@ using System.Text;
 
 namespace Business.Concrate
 {
-    public class ColorManager : IEquatableService<Color>
+    public class ColorManager : IColorService
     {
-        IEquatableDal<Color> _equatableDal;
+        IColorDal _colorDal;
 
-        public ColorManager(IEquatableDal<Color> equatableDal)
+        public ColorManager(IColorDal colorDal)
         {
-            _equatableDal = equatableDal;
+            _colorDal = colorDal;
         }
+
         public void Add(Color obj)
         {
-            _equatableDal.Add(obj);
+            _colorDal.Add(obj);
         }
 
-        public void Delete(int id)
+        public void Delete(Color obj)
         {
-            _equatableDal.Delete(id);
+            _colorDal.Delete(obj);
         }
 
         public List<Color> GetAll()
         {
-            return _equatableDal.GetAll();
+            return _colorDal.GetAll();
         }
 
         public Color GetById(int id)
         {
-            return _equatableDal.GetById(id);
+            return _colorDal.Get(c=> c.Id==id);
         }
 
         public void Update(Color obj)
         {
-            _equatableDal.Update(obj);
+            _colorDal.Update(obj);
         }
     }
 }
