@@ -16,23 +16,29 @@ namespace ConsoleUI
             BrandManager brandManager =new BrandManager(new EfBrandDal());
             ColorManager colorManager = new ColorManager(new EfColorDal());
 
-            //CarDtoManager carDtoManager = new CarDtoManager(new InMemoryCarDtoDal(carManager.GetAll(), brandManager.GetAll(), colorManager.GetAll()));
-            //AllDataWrite(carDtoManager);
+            var result = carManager.GetCarDetails();
+            if (result.Success)
+            {
+                foreach (var item in result.Data)
+                {
+                    Console.WriteLine(item.Id+" - "+item.BrandName+" - "+item.ColorName+" - "+item.ModelYear+" - "+item.DailyPrice+" - "+item.Decription);
+                }
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
 
             //brandManager.Add(new Brand {BrandName= "Volkswagen" });           
             //colorManager.Update(new Color { Id = 1, ColorName = "Pembe" });
             //Car updateCar = new Car { Id=1, BrandId=4, ColorId=1, DailyPrice=500, ModelYear=2005, Description="Yeni Açıklama."};
             //carManager.Update(updateCar);
 
-            //Console.WriteLine("------------------------------------------------------------------");
-            //Console.WriteLine("Ekleme, silme ve guncelleme islemlerinden sonra veriler");
-            //AllDataWrite(carDtoManager);
-
-            Console.WriteLine("Brand Id'si 1 olan arabalar: \nId\tColor Name\tBrand Name\tModel Year\tDaily Price\tDescriptions");
-            foreach (var car in carManager.GetAll())
-            {
-                Console.WriteLine($"{car.Id}\t{colorManager.GetById(car.ColorId).ColorName}\t\t{brandManager.GetById(car.BrandId).BrandName}\t\t{car.ModelYear}\t\t{car.DailyPrice}\t\t{car.Description}");
-            }
+            //Console.WriteLine("Bütün arabalar: \nId\tColor Name\tBrand Name\tModel Year\tDaily Price\tDescriptions");
+            //foreach (var car in carManager.GetAll())
+            //{
+            //    Console.WriteLine($"{car.Id}\t{colorManager.GetById(car.ColorId).ColorName}\t\t{brandManager.GetById(car.BrandId).BrandName}\t\t{car.ModelYear}\t\t{car.DailyPrice}\t\t{car.Description}");
+            //}
 
             //Console.WriteLine("\n\nColor Id'si 2 olan arabalar: \nId\tColor Name\tBrand Name\tModel Year\tDaily Price\tDescriptions");
             //foreach (var car in carManager.GetAllByColorId(2))
@@ -57,15 +63,5 @@ namespace ConsoleUI
             //brandManager.Add(new Brand { BrandName = "a" });
 
         }
-        public static void AllDataWrite(CarDtoManager carDtoManager)
-        {
-            Console.WriteLine("Butun Arabalar");
-            Console.WriteLine("ID    MARKA      RENK        MODEL        FIYAT       ACIKLAMA");
-            foreach (var car in carDtoManager.GetAll())
-            {
-                Console.WriteLine(car.Id + "    " + car.BrandName + "     " + car.ColorName + "       " + car.ModelYear + "       " + car.DailyPrice + "      " + car.Decription);
-            }
-        }
-
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constant;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -16,29 +18,44 @@ namespace Business.Concrate
             _brandDal = brandDal;
         }
 
-        public void Add(Brand obj)
+        public IResult Add(Brand obj)
         {
+            if (obj.BrandName.Length < 2)
+            {
+                new ErrorResult(Messages.BrandAdded);
+            }
             _brandDal.Add(obj);
+            return new SuccessResult(Messages.BrandAdded);
         }
 
-        public void Delete(Brand obj)
+        public IResult Delete(Brand obj)
         {
             _brandDal.Delete(obj);
+            return new SuccessResult(Messages.BrandDeleted);
         }
 
-        public List<Brand> GetAll()
+        public IDataResult<List<Brand>> GetAll()
         {
-            return _brandDal.GetAll();
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
         }
 
-        public Brand GetById(int id)
+        public IDataResult<Brand> GetById(int id)
         {
-            return _brandDal.Get(b=> b.Id==id);
+            //Burada id'leri uyuşan marka var ise brandResult'a atanıyor.
+            var brandResult = _brandDal.Get(b => b.Id == id);
+            if (brandResult==null)
+            {
+                //Eğer brandResult null ise geriye hata gönderiliyor.
+                return new ErrorDataResult<Brand>(Messages.ListedError);
+            }
+            //if çalışmaz ise id'si uyuşan marka geri gönderiliyor.
+            return new SuccessDataResult<Brand>(brandResult);
         }
 
-        public void Update(Brand obj)
+        public IResult Update(Brand obj)
         {
             _brandDal.Update(obj);
+            return new SuccessResult(Messages.BrandUpdated);
         }
     }
 }

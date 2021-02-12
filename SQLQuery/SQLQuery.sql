@@ -1,21 +1,21 @@
 ﻿CREATE TABLE Cars(
-	CarID int PRIMARY KEY IDENTITY(1,1),
-	BrandID int,
-	ColorID int,
+	Id int PRIMARY KEY IDENTITY(1,1),
+	BrandId int,
+	ColorId int,
 	ModelYear smallint,
 	DailyPrice int,
-	Descriptions nvarchar(30),
-	FOREIGN KEY (BrandID) REFERENCES Colors(ColorID),
-	FOREIGN KEY (ColorID) REFERENCES Brands(BrandID)
+	Description nvarchar(30),
+	FOREIGN KEY (BrandId) REFERENCES Colors(Id),
+	FOREIGN KEY (ColorId) REFERENCES Brands(Id)
 )
 
 CREATE TABLE Colors(
-	ColorID int PRIMARY KEY IDENTITY(1,1),
+	Id int PRIMARY KEY IDENTITY(1,1),
 	ColorName nvarchar(15),
 )
 
 CREATE TABLE Brands(
-	BrandID int PRIMARY KEY IDENTITY(1,1),
+	Id int PRIMARY KEY IDENTITY(1,1),
 	BrandName nvarchar(20),
 )
 

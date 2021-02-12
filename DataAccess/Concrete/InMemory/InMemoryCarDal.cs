@@ -1,5 +1,6 @@
 ﻿using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,11 @@ namespace DataAccess.Concrete.InMemory
         {
             //Id si uyuşan arabayı gönderir.
             return _cars.SingleOrDefault(c => c.Id == id);
+        }
+
+        public List<CarDetailDto> GetCarDetails()
+        {
+            throw new NotImplementedException();
         }
     }
 }

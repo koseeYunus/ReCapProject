@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Core.Entities;
+using Core.Utilities.Results;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Business.Abstract
 {
-    public interface IEquatableService<T>
+    public interface IEquatableService<T> where T: class, IEntity, new()
     {
-        void Add(T obj);
-        void Delete(T obj);
-        void Update(T obj);
-        List<T> GetAll();
-        T GetById(int id);
+        IResult Add(T obj);
+        IResult Delete(T obj);
+        IResult Update(T obj);
+        IDataResult<List<T>> GetAll();
+        IDataResult<T> GetById(int id);
     }
 }
