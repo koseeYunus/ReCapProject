@@ -10,58 +10,65 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("--- ReCap ---");
+            Console.WriteLine("\t\t--- ReCap ---\n");
 
-            CarManager carManager=new CarManager(new EfCarDal());
-            BrandManager brandManager =new BrandManager(new EfBrandDal());
-            ColorManager colorManager = new ColorManager(new EfColorDal());
+            CarManager carManager = new CarManager(new EfCarDal());
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
 
-            var result = carManager.GetCarDetails();
+            CarDetail(carManager);
+            Space();
+            RentalAdd(rentalManager);
+            Space();
+            RentalDetail(rentalManager);
+
+        }
+
+        private static void RentalAdd(RentalManager rentalManager)
+        {
+            Console.WriteLine("Recap araç kiralama kayıt.\n");
+            var addedResult = rentalManager.Add(new Rental { CustomerId = 1, CarId = 3, RentDate = DateTime.Now });
+            Console.WriteLine(addedResult.Message);
+        }
+
+        private static void Space()
+        {
+            Console.WriteLine("\n----------------------------------------------------------------------------------------------------------\n");
+        }
+
+        private static void RentalDetail(RentalManager rentalManager)
+        {
+            Console.WriteLine("Kiralanan araçların detayları.\n");
+            var result = rentalManager.GetRentalDetails();
+
             if (result.Success)
             {
                 foreach (var item in result.Data)
                 {
-                    Console.WriteLine(item.Id+" - "+item.BrandName+" - "+item.ColorName+" - "+item.ModelYear+" - "+item.DailyPrice+" - "+item.Decription);
+                    Console.WriteLine(item.Id + " - " + item.CarId + " - " + item.CustomerName + " - " + item.UserName + " - " + item.ModelYear + " - " +
+                        item.BrandName + " - " + item.ColorName + " - " + item.DailyPrice + " - " + item.RentDate + " - " + item.ReturnDate);
                 }
             }
             else
             {
                 Console.WriteLine(result.Message);
             }
+        }
 
-            //brandManager.Add(new Brand {BrandName= "Volkswagen" });           
-            //colorManager.Update(new Color { Id = 1, ColorName = "Pembe" });
-            //Car updateCar = new Car { Id=1, BrandId=4, ColorId=1, DailyPrice=500, ModelYear=2005, Description="Yeni Açıklama."};
-            //carManager.Update(updateCar);
-
-            //Console.WriteLine("Bütün arabalar: \nId\tColor Name\tBrand Name\tModel Year\tDaily Price\tDescriptions");
-            //foreach (var car in carManager.GetAll())
-            //{
-            //    Console.WriteLine($"{car.Id}\t{colorManager.GetById(car.ColorId).ColorName}\t\t{brandManager.GetById(car.BrandId).BrandName}\t\t{car.ModelYear}\t\t{car.DailyPrice}\t\t{car.Description}");
-            //}
-
-            //Console.WriteLine("\n\nColor Id'si 2 olan arabalar: \nId\tColor Name\tBrand Name\tModel Year\tDaily Price\tDescriptions");
-            //foreach (var car in carManager.GetAllByColorId(2))
-            //{
-            //    Console.WriteLine($"{car.CarId}\t{colorManager.GetById(car.ColorId).ColorName}\t\t{brandManager.GetById(car.BrandId).BrandName}\t\t{car.ModelYear}\t\t{car.DailyPrice}\t\t{car.Descriptions}");
-            //}
-
-            //Console.WriteLine("\n\nId'si 2 olan araba: \nId\tColor Name\tBrand Name\tModel Year\tDaily Price\tDescriptions");
-            //Car carById = carManager.GetById(2);
-            //Console.WriteLine($"{carById.CarId}\t{colorManager.GetById(carById.ColorId).ColorName}\t\t{brandManager.GetById(carById.BrandId).BrandName}\t\t{carById.ModelYear}\t\t{carById.DailyPrice}\t\t{carById.Descriptions}");
-
-
-            //Console.WriteLine("\n\nGünlük fiyat aralığı 100 ile 165 olan arabalar: \nId\tColor Name\tBrand Name\tModel Year\tDaily Price\tDescriptions");
-            //foreach (var car in carManager.GetByDailyPrice(100, 165))
-            //{
-            //    Console.WriteLine($"{car.CarId}\t{colorManager.GetById(car.ColorId).ColorName}\t\t{brandManager.GetById(car.BrandId).BrandName}\t\t{car.ModelYear}\t\t{car.DailyPrice}\t\t{car.Descriptions}");
-            //}
-
-            //Console.WriteLine("\n");
-
-            //carManager.Add(new Car { BrandId = 1, ColorId = 2, DailyPrice = -300, ModelYear = "2021", Descriptions = "Otomatik Dizel" });
-            //brandManager.Add(new Brand { BrandName = "a" });
-
+        private static void CarDetail(CarManager carManager)
+        {
+            Console.WriteLine("Araba detayları.");
+            var result = carManager.GetCarDetails();
+            if (result.Success)
+            {
+                foreach (var item in result.Data)
+                {
+                    Console.WriteLine(item.Id + " - " + item.BrandName + " - " + item.ColorName + " - " + item.ModelYear + " - " + item.DailyPrice + " - " + item.Decription);
+                }
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
         }
     }
 }
