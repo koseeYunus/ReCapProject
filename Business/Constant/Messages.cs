@@ -28,6 +28,9 @@ namespace Business.Constant
 
         public static string RentalAdded = "Kiralama işlemi başarılı.";
 
+        public static string SuccessAdded = "Ekleme işlemi başarılı.";
+        public static string SuccessDeleted = "Silme işlemi başarılı.";
+        public static string SuccessUpdated = "Güncelleme işlemi başarılı.";
         public static string SuccessListed = "Listeleme işlemi başarılı.";
 
         public static string AddedError = "Ekleme işlemi gerçekleştirilirken bir hata ile karşılaşıldı. Lütfen bilgileri kontrol ediniz.";

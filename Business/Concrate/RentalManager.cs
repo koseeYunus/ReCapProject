@@ -37,17 +37,18 @@ namespace Business.Concrate
 
         public IResult Delete(Rental obj)
         {
-            throw new NotImplementedException();
+            _rentalDal.Delete(obj);
+            return new SuccessResult(Messages.SuccessDeleted);
         }
 
         public IDataResult<List<Rental>> GetAll()
         {
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(),Messages.CarListed);
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.SuccessListed);
         }
 
         public IDataResult<Rental> GetById(int id)
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<Rental>(_rentalDal.Get(g=> g.Id==id),Messages.SuccessListed);
         }
 
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
@@ -60,13 +61,13 @@ namespace Business.Concrate
             {
 
                 return new ErrorDataResult<List<RentalDetailDto>>(Messages.ListedError);
-            }
-            
+            }          
         }
 
         public IResult Update(Rental obj)
         {
-            throw new NotImplementedException();
+            _rentalDal.Update(obj);
+            return new SuccessResult(Messages.SuccessUpdated);
         }
     }
 }
