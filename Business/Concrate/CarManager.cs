@@ -49,7 +49,7 @@ namespace Business.Concrate
 
         public IDataResult<List<Car>> GetAllByModelYear(short year)
         {
-            if (year < 1990 || year > 2021)
+            if (year < 1950)
             {
                 return new ErrorDataResult<List<Car>>(Messages.ListedError);
             }
