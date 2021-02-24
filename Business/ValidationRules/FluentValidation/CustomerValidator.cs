@@ -6,11 +6,7 @@ using System.Text;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    public class BrandValidator: AbstractValidator<Brand>
+    public class CustomerValidator: AbstractValidator<Customer>
     {
-        public BrandValidator()
-        {
-            RuleFor(b=> b.BrandName).MinimumLength(2);
-        }
     }
 }

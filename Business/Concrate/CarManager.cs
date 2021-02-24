@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrate;
 using DataAccess.Abstract;
@@ -20,18 +22,17 @@ namespace Business.Concrate
             _carDal = carDal;
 
         }
+
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car obj)
         {
-            //Burada arabanın açıklaması 15'ten küçükse ve günlük fiyatı 0'dan küçükse ErrorResult'düşürülmesi sağlanıyor
-            if (obj.Description.Length<15 && obj.DailyPrice>0)
-            {
-                return new ErrorResult(Messages.CarValidateError);
-            }
-            //if'e girmez ise UI'dan gelen araba DataAccess'e eklenerek SuccessResult geri gönderiliyor.
+            //return new ErrorResult(Messages.CarValidateError);
+
             _carDal.Add(obj);
-            return new SuccessResult(Messages.ColorAdded);
+            return new SuccessResult(Messages.CarAdded);
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Delete(Car obj)
         {
             if (DateTime.Now.Hour==00)
@@ -39,7 +40,7 @@ namespace Business.Concrate
                 return new ErrorResult(Messages.AddedError);
             }
             _carDal.Delete(obj);
-            return new SuccessResult(Messages.CarAdded);
+            return new SuccessResult(Messages.CarDeleted);
         }
 
         public IDataResult<List<Car>> GetAll()
@@ -49,7 +50,7 @@ namespace Business.Concrate
 
         public IDataResult<List<Car>> GetAllByModelYear(short year)
         {
-            if (year < 1950)
+            if (year < 1900)
             {
                 return new ErrorDataResult<List<Car>>(Messages.ListedError);
             }
@@ -77,9 +78,15 @@ namespace Business.Concrate
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.ColorId==colorId));
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car obj)
         {
-            return new SuccessDataResult<Car>(Messages.CarAdded);
+            return new SuccessDataResult<Car>(Messages.CarUpdated);
+        }
+
+        public IDataResult<List<Car>> GetByDailyPrice(decimal min, decimal max)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.DailyPrice >= min && c.DailyPrice <= max), Messages.SuccessListed);
         }
     }
 }

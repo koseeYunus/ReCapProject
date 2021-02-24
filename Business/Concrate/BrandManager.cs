@@ -1,5 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrate;
 using DataAccess.Abstract;
@@ -19,16 +22,18 @@ namespace Business.Concrate
             _brandDal = brandDal;
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand obj)
         {
-            if (obj.BrandName.Length < 2)
-            {
-                new ErrorResult(Messages.BrandAdded);
-            }
+            //new ErrorResult(Messages.BrandAdded);
+
+            //ValidationTool.Validate(new BrandValidator(), obj);
+             
             _brandDal.Add(obj);
             return new SuccessResult(Messages.BrandAdded);
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Delete(Brand obj)
         {
             _brandDal.Delete(obj);
@@ -53,6 +58,7 @@ namespace Business.Concrate
             return new SuccessDataResult<Brand>(brandResult);
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Update(Brand obj)
         {
             _brandDal.Update(obj);

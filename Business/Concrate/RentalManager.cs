@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrate;
 using DataAccess.Abstract;
@@ -19,6 +21,7 @@ namespace Business.Concrate
             _rentalDal = rentalDal;
         }
 
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental obj)
         {
             var resultCars = _rentalDal.GetAll(v => v.CarId == obj.CarId);
@@ -35,6 +38,7 @@ namespace Business.Concrate
             return new SuccessResult(Messages.RentalAdded);
         }
 
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Delete(Rental obj)
         {
             _rentalDal.Delete(obj);
@@ -64,6 +68,7 @@ namespace Business.Concrate
             }          
         }
 
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Update(Rental obj)
         {
             _rentalDal.Update(obj);
