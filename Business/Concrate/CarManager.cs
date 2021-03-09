@@ -26,8 +26,7 @@ namespace Business.Concrate
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car obj)
         {
-            //return new ErrorResult(Messages.CarValidateError);
-
+            
             _carDal.Add(obj);
             return new SuccessResult(Messages.CarAdded);
         }
@@ -35,10 +34,7 @@ namespace Business.Concrate
         [ValidationAspect(typeof(CarValidator))]
         public IResult Delete(Car obj)
         {
-            if (DateTime.Now.Hour==00)
-            {
-                return new ErrorResult(Messages.AddedError);
-            }
+
             _carDal.Delete(obj);
             return new SuccessResult(Messages.CarDeleted);
         }
@@ -55,6 +51,7 @@ namespace Business.Concrate
                 return new ErrorDataResult<List<Car>>(Messages.ListedError);
             }
             var getAllByModel = _carDal.GetAll(c => c.ModelYear == year);
+
             return new SuccessDataResult<List<Car>>(getAllByModel);
         }
 
@@ -81,6 +78,7 @@ namespace Business.Concrate
         [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car obj)
         {
+
             return new SuccessDataResult<Car>(Messages.CarUpdated);
         }
 

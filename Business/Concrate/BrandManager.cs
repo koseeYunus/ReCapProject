@@ -3,6 +3,7 @@ using Business.Constant;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrate;
 using DataAccess.Abstract;
@@ -25,10 +26,12 @@ namespace Business.Concrate
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand obj)
         {
-            //new ErrorResult(Messages.BrandAdded);
+            IResult result = BusinessRules.Run(CheckIfBrandNameExists(obj.BrandName));
 
-            //ValidationTool.Validate(new BrandValidator(), obj);
-             
+            if (result!=null)
+            {
+                return result;
+            }
             _brandDal.Add(obj);
             return new SuccessResult(Messages.BrandAdded);
         }
@@ -63,6 +66,18 @@ namespace Business.Concrate
         {
             _brandDal.Update(obj);
             return new SuccessResult(Messages.BrandUpdated);
+        }
+
+
+        private IResult CheckIfBrandNameExists(string brandName)
+        {
+            //Aynı isimde ürün var ise ekleme işlemini yapma
+            var result = _brandDal.GetAll(b => b.BrandName == brandName).Count > 0;
+            if (result)
+            {
+                return new ErrorResult(Messages.AddedError);
+            }
+            return new SuccessResult();
         }
     }
 }

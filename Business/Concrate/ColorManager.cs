@@ -2,6 +2,7 @@
 using Business.Constant;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrate;
 using DataAccess.Abstract;
@@ -32,8 +33,9 @@ namespace Business.Concrate
 
         public IResult Delete(Color obj)
         {
-            //Burada UI dan gelen rengin id'si ile DataAccess'de id'si uyuşan renk olup olmadığı kontrol ediliyor.
-            if (_colorDal.Get(c => c.Id == obj.Id)==null)
+            IResult result = BusinessRules.Run(CheckIfColorNameExists(obj.ColorName));
+
+            if (result!=null)
             {
                 return new ErrorResult(Messages.IdError);
             }
@@ -57,5 +59,17 @@ namespace Business.Concrate
             _colorDal.Update(obj);
             return new SuccessResult(Messages.ColorUpdated);
         }
+
+
+        private IResult CheckIfColorNameExists(string colorName)
+        {
+            var result = _colorDal.GetAll(c=> c.ColorName==colorName).Count > 0;
+            if (result)
+            {
+                return new ErrorResult(Messages.AddedError);
+            }
+            return new SuccessResult();
+        }
+
     }
 }

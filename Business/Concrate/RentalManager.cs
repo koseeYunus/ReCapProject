@@ -2,6 +2,7 @@
 using Business.Constant;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrate;
 using DataAccess.Abstract;
@@ -24,15 +25,11 @@ namespace Business.Concrate
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental obj)
         {
-            var resultCars = _rentalDal.GetAll(v => v.CarId == obj.CarId);
-            //Burada kiralanacak arabanın id'si veritabanında başka bir kirada kullanılıp kullanılmadığı kotrol edildikten sonra
-            //returndate'in boş olup olmadığı kontrol ediliyor.
-            foreach (var item in resultCars)
+            IResult result= BusinessRules.Run( CheckIfTheCarIsRented(obj));
+
+            if (result!=null)
             {
-                if (item.CarId==obj.CarId && item.ReturnDate==null)
-                {
-                    return new ErrorResult(Messages.AddedError);
-                }
+                return result;
             }
             _rentalDal.Add(obj);
             return new SuccessResult(Messages.RentalAdded);
@@ -73,6 +70,16 @@ namespace Business.Concrate
         {
             _rentalDal.Update(obj);
             return new SuccessResult(Messages.SuccessUpdated);
+        }
+
+
+        private IResult CheckIfTheCarIsRented(Rental rental)
+        {
+            if (_rentalDal.GetAll(r=> r.CarId==rental.CarId).Count>0 && rental.ReturnDate==null)
+            {
+                return new ErrorResult(Messages.AddedError);
+            }
+            return new SuccessResult();
         }
     }
 }
